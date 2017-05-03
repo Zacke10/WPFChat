@@ -34,11 +34,11 @@ namespace ChatServer
         {
             try
             {
-                NetworkStream n = TcpClient.GetStream();
-                BinaryReader bReader = new BinaryReader(n);
                 string message = "";
                 while (true)
                 {
+                    NetworkStream n = TcpClient.GetStream();
+                    BinaryReader bReader = new BinaryReader(n);
                     message = bReader.ReadString();
                     messManager.HandleMessage(message);
                     Console.WriteLine(message);

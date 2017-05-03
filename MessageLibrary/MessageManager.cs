@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MessageLibrary
 {
     public class MessageManager
-        
+
     {
         private Action<ChatMessage> messageHandler;
         private Action<Login> statusHandler;
@@ -23,7 +23,28 @@ namespace MessageLibrary
         /// <param name="message"></param>
         public void HandleMessage(string message)
         {
+            try
+            {
+                if (message.StartsWith("msg:"))
+                {
+                    ChatMessage cm = Newtonsoft.Json.JsonConvert.DeserializeObject<ChatMessage>(message.Substring(4));
+                    messageHandler(cm);
+                }
+                else if (message.StartsWith("cmd:"))
+                {
+                    Login cm = Newtonsoft.Json.JsonConvert.DeserializeObject<Login>(message.Substring(4));
+                    statusHandler(cm);
+                }
+                else
+                {
+                    //do nothing, just chill
+                }
+            }
+            catch (Exception)
+            {
 
+                throw;
+            }
         }
 
     }
