@@ -14,7 +14,8 @@ namespace ChatServer
 
         public void HandleChatMessage(ChatMessage cMessage)
         {
-
+            cServer.AddMessageToQueue(cMessage);
+            cServer.Broadcast();
         }
 
         public void HandleLogin(Login login)
@@ -40,13 +41,12 @@ namespace ChatServer
                     NetworkStream n = TcpClient.GetStream();
                     BinaryReader bReader = new BinaryReader(n);
                     message = bReader.ReadString();
-                    messManager.HandleMessage(message);
                     Console.WriteLine(message);
+                    messManager.HandleMessage(message);
                 }
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

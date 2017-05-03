@@ -13,10 +13,11 @@ namespace MessageLibrary
         public string Version { get; set; }
         public string StatusMessage { get; set; }
         public bool? LoginSuccessful { get; set; }
+        public string Prefix => "cmd:";
 
         public string ToJSON()
         {
-            return JsonConvert.SerializeObject(this);
+            return Prefix + JsonConvert.SerializeObject(this);
         }
     }
 }

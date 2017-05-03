@@ -18,6 +18,6 @@
         <Label Content="Local Name:" Height="28" HorizontalAlignment="Left" Margin="293,7,0,0" Name="label4" VerticalAlignment="Top" />
         <TextBox Height="23" HorizontalAlignment="Left" Margin="373,8,0,0" Name="localName" VerticalAlignment="Top" Width="117" />
         <TextBox Height="52" HorizontalAlignment="Left" Margin="11,274,0,0" Name="messageText" VerticalAlignment="Top" Width="356" />
-        <Button Content="Send" Height="35" HorizontalAlignment="Left" Margin="373,274,0,0" Name="sendMessageButton" VerticalAlignment="Top" Width="117" IsDefault="True"/>
+        <Button Content="Send" Height="35" HorizontalAlignment="Left" Margin="373,274,0,0" Name="sendMessageButton" VerticalAlignment="Top" Width="117" IsDefault="True" Click="sendMessageButton_Click"/>
     </Grid>
 </Window>

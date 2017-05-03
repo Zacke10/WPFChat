@@ -14,15 +14,10 @@ namespace ChatServer
     {
         static void Main(string[] args)
         {
-            //Server myServer = new Server();
-            //Thread serverThread = new Thread(myServer.Run);
-            //serverThread.Start();
-            //serverThread.Join();
-
-            ChatMessage cm = new ChatMessage();
-            cm.Body = "hej";
-            cm.Sender = "då";
-            Console.WriteLine(cm.ToJSON());
+            Server myServer = new Server();
+            Thread serverThread = new Thread(myServer.Run);
+            serverThread.Start();
+            serverThread.Join();
         }
     }
 }

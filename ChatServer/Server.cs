@@ -65,21 +65,25 @@ namespace ChatServer
             while (chatQueue.TryDequeue(out cm))
             {
                 string messageSerialized = cm.ToJSON();
-                foreach (ClientHandler tmpClient in clients)
+                lock (clients)
                 {
-                    if (tmpClient.UserName != cm.Sender)
+                    foreach (ClientHandler tmpClient in clients)
                     {
-                        NetworkStream n = tmpClient.TcpClient.GetStream();
-                        BinaryWriter w = new BinaryWriter(n);
-                        w.Write(messageSerialized);
-                        w.Flush();
-                    }
-                    else if (clients.Count == 1)
-                    {
-                        NetworkStream n = tmpClient.TcpClient.GetStream();
-                        BinaryWriter w = new BinaryWriter(n);
-                        w.Write("Sorry, you are alone...");
-                        w.Flush();
+                        if (tmpClient.UserName != cm.Sender || true)
+                        {
+                            NetworkStream n = tmpClient.TcpClient.GetStream();
+                            BinaryWriter w = new BinaryWriter(n);
+                            w.Write(messageSerialized);
+                            w.Flush();
+                            Console.WriteLine("Message has been sent to client");
+                        }
+                        else if (clients.Count == 1)
+                        {
+                            NetworkStream n = tmpClient.TcpClient.GetStream();
+                            BinaryWriter w = new BinaryWriter(n);
+                            w.Write("Sorry, you are alone...");
+                            w.Flush();
+                        }
                     }
                 }
             }

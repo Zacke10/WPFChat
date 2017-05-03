@@ -1,7 +1,9 @@
-﻿using System;
+﻿using MessageLibrary;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,9 +22,32 @@ namespace WPFChat
     /// </summary>
     public partial class MainWindow : Window
     {
+        Client client;
+        List<ChatMessage> chatList = new List<ChatMessage>();
         public MainWindow()
         {
             InitializeComponent();
+            client = new Client(chatList);
+            Thread clientThread = new Thread(client.Start);
+            clientThread.Start();
+        }
+
+        public void DisplayMessages()
+        {
+            chatBox.Clear();
+            foreach (var x in chatList)
+            {
+                chatBox.AppendText($"{x.Sender}: {x.Body} \n");
+
+            }
+        }
+
+        private void sendMessageButton_Click(object sender, RoutedEventArgs e)
+        {
+            ChatMessage messageToSend = new ChatMessage() { Body = messageText.Text };
+            client.AddMessageToSend(messageToSend);
+            messageText.Clear();
+
         }
     }
 }

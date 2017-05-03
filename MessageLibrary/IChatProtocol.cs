@@ -9,6 +9,7 @@ namespace MessageLibrary
     public interface IChatProtocol 
     {
         string ToJSON();
+        string Prefix { get;}
 
     }
 }

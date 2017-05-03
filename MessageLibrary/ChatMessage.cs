@@ -12,10 +12,11 @@ namespace MessageLibrary
         public string Sender { get; set; }
         public List<string> Recipients { get; set; }
         public string Body { get; set; }
-
+        [JsonIgnore]
+        public string Prefix => "msg:";
         public string ToJSON()
         {
-            return JsonConvert.SerializeObject(this);
+            return Prefix + JsonConvert.SerializeObject(this);
         }
     }
 }
