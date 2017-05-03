@@ -46,6 +46,8 @@
     <Compile Include="ChatMessage.cs" />
     <Compile Include="IChatProtocol.cs" />
     <Compile Include="Login.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="MessageManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
