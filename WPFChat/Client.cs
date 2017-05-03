@@ -8,16 +8,21 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace WPFChat
 {
     class Client
     {
         private TcpClient client;
+        Action<ChatMessage> addMessage;
         BlockingCollection<ChatMessage> messageCollection = new BlockingCollection<ChatMessage>();
-        public Client()
+        Window mainWindow;
+        public Client(Action<ChatMessage> messageAdder, Window w)
         {
-            //HACK komma åt chattfönstret..
+            addMessage = messageAdder;
+            mainWindow = w;
         }
         public void Start()
         {
@@ -48,7 +53,9 @@ namespace WPFChat
                 {
                     NetworkStream n = client.GetStream();
                     message = new BinaryReader(n).ReadString();
+                    ChatMessage cM = new ChatMessage() { Body = message };
                     Console.WriteLine("Other: " + message);
+                    mainWindow.Dispatcher.Invoke(new Action(() => addMessage(cM)));
                 }
             }
             catch (Exception ex)
@@ -59,7 +66,7 @@ namespace WPFChat
 
         public void DisplayInChatWindow(ChatMessage message)
         {
-            
+
         }
 
         public void Send()

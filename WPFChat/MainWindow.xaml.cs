@@ -27,7 +27,7 @@ namespace WPFChat
         public MainWindow()
         {
             InitializeComponent();
-            client = new Client(chatList);
+            client = new Client( c=> { chatList.Add(c); DisplayMessages(); } , this);
             Thread clientThread = new Thread(client.Start);
             clientThread.Start();
         }
