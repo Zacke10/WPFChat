@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace MessageLibrary
 {
-    class ChatMessage : IChatProtocol
+    public class ChatMessage : Message, IChatProtocol
     {
         public string Sender { get; set; }
         public List<string> Recipients { get; set; }
