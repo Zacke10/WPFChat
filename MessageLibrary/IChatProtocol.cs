@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MessageLibrary
 {
-    public interface IChatProtocol
+    public interface IChatProtocol 
     {
         string ToJSON();
 
