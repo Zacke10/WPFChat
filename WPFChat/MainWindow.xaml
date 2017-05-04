@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WPFChat"
         mc:Ignorable="d"
         Title="MainWindow" Height="407.143" Width="541.327"
-        SizeToContent="WidthAndHeight">
+        SizeToContent="WidthAndHeight" Closed="Window_Closed">
     <Grid>
         <TextBox Height="23" HorizontalAlignment="Left" Margin="68,8,0,0" Name="serverIP" VerticalAlignment="Top" Width="97" />
         <Label Content="Server IP:" Height="28" HorizontalAlignment="Left" Margin="8,6,0,0" Name="label1" VerticalAlignment="Top" />
@@ -18,7 +18,7 @@
         <TextBox Height="23" HorizontalAlignment="Left" Margin="318,0,0,344.6" Name="userName" VerticalAlignment="Bottom" Width="117" />
         <TextBox Height="52" HorizontalAlignment="Left" Margin="11,274,0,0" Name="messageText" VerticalAlignment="Top" Width="356" />
         <Button Content="Send" Height="52" HorizontalAlignment="Left" Margin="373,274,0,0" Name="sendMessageButton" VerticalAlignment="Top" Width="117" IsDefault="True" Click="sendMessageButton_Click"/>
-        <Button Content="Connect" HorizontalAlignment="Left" Margin="450,10,0,0" Name="connectButton" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <Button Content="Connect" HorizontalAlignment="Left" Margin="450,10,0,0" Name="connectButton" VerticalAlignment="Top" Width="75" Click="connectButton_Click"/>
         <ListBox HorizontalAlignment="Left" Height="203" Margin="373,66,0,0" Name="listBoxUsers" VerticalAlignment="Top" Width="117"/>
     </Grid>
 </Window>

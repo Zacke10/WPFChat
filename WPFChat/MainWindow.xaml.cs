@@ -31,6 +31,11 @@ namespace WPFChat
             InitializeComponent();
             client = new Client(this);
             EnabledComponent(false);
+            serverIP.Text = "127.0.0.1";
+            serverPort.Text = "5000";
+            userName.Text = "Polismyndigheten";
+
+
         }
 
         private void EnabledComponent(bool isConnected)
@@ -50,9 +55,12 @@ namespace WPFChat
         public void DisplayMessages()
         {
             chatBox.Clear();
-            foreach (var x in chatList)
+            foreach (var chatMessage in chatList)
             {
-                chatBox.AppendText($"{x.Sender}: {x.Body} \n");
+                if (chatMessage.Recipients == null)
+                    chatBox.AppendText($"{chatMessage.Sender}: {chatMessage.Body} \n");
+                else
+                    chatBox.AppendText($"{chatMessage.Sender} (PRIVATE): {chatMessage.Body} \n");
 
             }
         }
@@ -61,18 +69,19 @@ namespace WPFChat
         {
 
             //TODO kolla namn listan och skapa recipents
-
-            string sendTo = listBoxUsers.SelectedItem.ToString() == BroadcastMessage ? null : listBoxUsers.SelectedItem.ToString();
-            List<string> recipients = sendTo != null ? new List<string>() {sendTo} : null;
-            ChatMessage messageToSend = new ChatMessage()
+            if (listBoxUsers.SelectedIndex != -1)
             {
-                Body = messageText.Text,
-                Recipients = recipients
-                
-            };
-            client.AddMessageToSend(messageToSend);
-            messageText.Clear();
+                string sendTo = listBoxUsers.SelectedItem.ToString() == BroadcastMessage ? null : listBoxUsers.SelectedItem.ToString();
+                List<string> recipients = sendTo != null ? new List<string>() { sendTo } : null;
+                ChatMessage messageToSend = new ChatMessage()
+                {
+                    Body = messageText.Text,
+                    Recipients = recipients
 
+                };
+                client.AddMessageToSend(messageToSend);
+                messageText.Clear();
+            }
         }
 
         public ServerInfo GetServerInfo()
@@ -89,10 +98,11 @@ namespace WPFChat
 
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void connectButton_Click(object sender, RoutedEventArgs e)
         {
             EnabledComponent(true);
             Thread clientThread = new Thread(client.Start);
+            clientThread.IsBackground = true;
             clientThread.Start(GetServerInfo());
         }
 
@@ -121,7 +131,14 @@ namespace WPFChat
                 {
                     listBoxUsers.Items.Add(user);
                 }
+                listBoxUsers.SelectedIndex = 0;
             });
+
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

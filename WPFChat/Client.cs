@@ -37,9 +37,11 @@ namespace WPFChat
                 client = new TcpClient(serverInfo.ServerIP, serverInfo.ServerPort);
 
                 Thread listenerThread = new Thread(Listen);
+                listenerThread.IsBackground = true;
                 listenerThread.Start();
 
                 Thread senderThread = new Thread(Send);
+                senderThread.IsBackground = true;
                 senderThread.Start();
 
                 senderThread.Join();

@@ -14,17 +14,28 @@ namespace ChatServer
 
         public void HandleMessage(ChatMessage cMessage)
         {
-            cServer.AddMessageToQueue(cMessage);
-            cServer.SendMessage();
+            if (!String.IsNullOrEmpty(UserName))
+            {
+                cServer.AddMessageToQueue(cMessage);
+                cServer.SendMessage();
+            }
         }
 
         public void HandleLogin(Login login)
         {
-            UserName = login.UserName;
-            cServer.SendUsernames();
+            if (cServer.IsValidUsername(login.UserName))
+            {
+                UserName = login.UserName;
+                cServer.SendUsernames();
+            }
+            else
+            {
+                UserName = login.UserName + Guid.NewGuid();
+                cServer.SendUsernames();
+            }
         }
 
-       
+
 
         public ClientHandler(TcpClient c, Server server)
         {
@@ -48,9 +59,13 @@ namespace ChatServer
                     messManager.HandleMessage(message);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                cServer.DisconnectClient(this);
             }
         }
 

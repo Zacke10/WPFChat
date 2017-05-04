@@ -22,7 +22,6 @@ namespace ChatServer
 
         public void DisconnectClient(ClientHandler client)
         {
-
             lock (clients)
             {
                 clients.Remove(client);
@@ -44,7 +43,6 @@ namespace ChatServer
                     TcpClient c = listener.AcceptTcpClient();
                     ClientHandler newClient = new ClientHandler(c, this);
                     clients.Add(newClient);
-
                     Thread clientThread = new Thread(newClient.Run);
                     clientThread.Start();
                 }
@@ -59,18 +57,28 @@ namespace ChatServer
                     listener.Stop();
             }
         }
+
+        public bool IsValidUsername(string username)
+        {
+            lock (clients)
+            {
+                return clients.Where(c => c.UserName == username).Count() == 0;
+            }
+        }
+
         public void SendUsernames()
         {
             lock (clients)
             {
-                UsernameList ul = new UsernameList() {
+                UsernameList ul = new UsernameList()
+                {
                     Usernames = clients.Select(c => c.UserName).ToList()
                 };
                 string message = ul.ToJSON();
 
                 foreach (var client in clients)
                 {
-                    
+
                     ExecuteSend(message, client);
                 }
             }
@@ -92,7 +100,7 @@ namespace ChatServer
                     }
                     else
                     {
-                        tmpClients = clients.Where(c => cm.Recipients.Contains(c.UserName) || cm.Sender == c.UserName);
+                        tmpClients = clients.Where(c => cm.Recipients.Exists(s => s == c.UserName) || cm.Sender == c.UserName);
                     }
 
                     foreach (ClientHandler tmpClient in tmpClients)
