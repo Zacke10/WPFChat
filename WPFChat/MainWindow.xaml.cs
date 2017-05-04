@@ -20,15 +20,31 @@ namespace WPFChat
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IChatController
     {
         Client client;
         List<ChatMessage> chatList = new List<ChatMessage>();
+
         public MainWindow()
         {
             InitializeComponent();
-            client = new Client( c=> { chatList.Add(c); DisplayMessages(); } , this);
+            client = new Client(this);
+            EnabledComponent(false);
         }
+
+        private void EnabledComponent(bool isConnected)
+        {
+            chatBox.IsEnabled = isConnected;
+            messagesFrom.IsEnabled = chatBox.IsEnabled;
+            sendMessageButton.IsEnabled = chatBox.IsEnabled;
+            messageText.IsEnabled = chatBox.IsEnabled;
+
+            serverIP.IsEnabled = !isConnected;
+            serverPort.IsEnabled = serverIP.IsEnabled;
+            userName.IsEnabled = serverIP.IsEnabled;
+            connectButton.IsEnabled = serverIP.IsEnabled;
+        }
+
 
         public void DisplayMessages()
         {
@@ -64,8 +80,22 @@ namespace WPFChat
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            EnabledComponent(true);
             Thread clientThread = new Thread(client.Start);
             clientThread.Start(GetServerInfo());
+        }
+
+        public void HandleMessage(ChatMessage message)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                chatList.Add(message);
+                DisplayMessages();
+            });
+        }
+
+        public void HandleLogin(Login login)
+        {
             
         }
     }

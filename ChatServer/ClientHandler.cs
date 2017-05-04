@@ -5,22 +5,22 @@ using System.Net.Sockets;
 
 namespace ChatServer
 {
-    internal class ClientHandler
+    internal class ClientHandler : IChatController
     {
         public TcpClient TcpClient { get; set; }
         public string UserName { get; set; }
         private Server cServer;
         private MessageManager messManager;
 
-        public void HandleChatMessage(ChatMessage cMessage)
+        public void HandleMessage(ChatMessage cMessage)
         {
             cServer.AddMessageToQueue(cMessage);
-            cServer.Broadcast();
+            cServer.SendMessage();
         }
 
         public void HandleLogin(Login login)
         {
-
+            UserName = login.UserName;
         }
 
         public ClientHandler(TcpClient c, Server server)
@@ -28,7 +28,7 @@ namespace ChatServer
             TcpClient = c;
             cServer = server;
             UserName = "";
-            messManager = new MessageManager(HandleChatMessage, HandleLogin);
+            messManager = new MessageManager(this);
         }
 
         internal void Run()
@@ -50,8 +50,5 @@ namespace ChatServer
                 throw;
             }
         }
-
-
-
     }
 }

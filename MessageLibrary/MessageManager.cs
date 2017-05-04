@@ -9,13 +9,11 @@ namespace MessageLibrary
     public class MessageManager
 
     {
-        private Action<ChatMessage> messageHandler;
-        private Action<Login> statusHandler;
+        private IChatController chatController;
 
-        public MessageManager(Action<ChatMessage> chatMessage, Action<Login> login)
+        public MessageManager(IChatController chatController)
         {
-            messageHandler = chatMessage;
-            statusHandler = login;
+            this.chatController = chatController;
         }
         /// <summary>
         /// Hanterar meddelande och skickar till motsvarande action
@@ -28,12 +26,12 @@ namespace MessageLibrary
                 if (message.StartsWith("msg:"))
                 {
                     ChatMessage cm = Newtonsoft.Json.JsonConvert.DeserializeObject<ChatMessage>(message.Substring(4));
-                    messageHandler(cm);
+                    chatController.HandleMessage(cm);
                 }
                 else if (message.StartsWith("cmd:"))
                 {
                     Login cm = Newtonsoft.Json.JsonConvert.DeserializeObject<Login>(message.Substring(4));
-                    statusHandler(cm);
+                    chatController.HandleLogin(cm);
                 }
                 else
                 {

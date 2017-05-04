@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading;
 using System.IO;
 using System.Collections.Concurrent;
+using System.Linq;
 
 namespace ChatServer
 {
@@ -59,7 +60,7 @@ namespace ChatServer
                     listener.Stop();
             }
         }
-        public void Broadcast()
+        public void SendMessage()
         {
             ChatMessage cm;
             while (chatQueue.TryDequeue(out cm))
@@ -67,26 +68,32 @@ namespace ChatServer
                 string messageSerialized = cm.ToJSON();
                 lock (clients)
                 {
+                    IEnumerable<ClientHandler> tmpClients;
+
+                    if (cm.Recipients == null)
+                    {
+                        tmpClients = clients;
+                    }
+                    else
+                    {
+                        tmpClients = clients.Where(c => cm.Recipients.Contains(c.UserName) || cm.Sender == c.UserName);
+                    }
+
                     foreach (ClientHandler tmpClient in clients)
                     {
-                        if (tmpClient.UserName != cm.Sender || true)
-                        {
-                            NetworkStream n = tmpClient.TcpClient.GetStream();
-                            BinaryWriter w = new BinaryWriter(n);
-                            w.Write(messageSerialized);
-                            w.Flush();
-                            Console.WriteLine("Message has been sent to client");
-                        }
-                        else if (clients.Count == 1)
-                        {
-                            NetworkStream n = tmpClient.TcpClient.GetStream();
-                            BinaryWriter w = new BinaryWriter(n);
-                            w.Write("Sorry, you are alone...");
-                            w.Flush();
-                        }
+                        ExecuteSend(messageSerialized, tmpClient);
                     }
                 }
             }
+        }
+
+        private void ExecuteSend(string messageSerialized, ClientHandler tmpClient)
+        {
+            NetworkStream n = tmpClient.TcpClient.GetStream();
+            BinaryWriter w = new BinaryWriter(n);
+            w.Write(messageSerialized);
+            w.Flush();
+            Console.WriteLine("Message has been sent to client");
         }
     }
 }

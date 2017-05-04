@@ -16,18 +16,22 @@ namespace WPFChat
     class Client
     {
         private TcpClient client;
-        Action<ChatMessage> addMessage;
         BlockingCollection<ChatMessage> messageCollection = new BlockingCollection<ChatMessage>();
         MainWindow mainWindow;
+        public string UserName { get; set; }
 
-        public Client(Action<ChatMessage> messageAdder, MainWindow w)
+        private MessageManager messageManager;
+
+        public Client(MainWindow w)
         {
-            addMessage = messageAdder;
             mainWindow = w;
+            messageManager = new MessageManager(w);
         }
+
         public void Start(object info)
         {
             ServerInfo serverInfo = info as ServerInfo;
+            UserName = serverInfo.Username;
             try
             {
                 client = new TcpClient(serverInfo.ServerIP, serverInfo.ServerPort);
@@ -55,17 +59,17 @@ namespace WPFChat
 
         public void Listen()
         {
-            string message = "";
 
             try
             {
+                string message = "";
+
                 while (true)
                 {
                     NetworkStream n = client.GetStream();
                     message = new BinaryReader(n).ReadString();
-                    ChatMessage cM = new ChatMessage() { Body = message };
+                    messageManager.HandleMessage(message);
                     Console.WriteLine("Other: " + message);
-                    mainWindow.Dispatcher.Invoke(new Action(() => addMessage(cM)));
                 }
             }
             catch (Exception ex)
@@ -83,20 +87,30 @@ namespace WPFChat
         {
             try
             {
+                NetworkStream n = client.GetStream();
+                BinaryWriter w = new BinaryWriter(n);
+                Login login = new Login() {UserName = UserName};
+                w.Write(login.ToJSON());
+                w.Flush();
+
                 while (true)
                 {
                     ChatMessage temp = messageCollection.Take();
-                    NetworkStream n = client.GetStream();
-                    BinaryWriter w = new BinaryWriter(n);
+                    n = client.GetStream();
+                    w = new BinaryWriter(n);
                     w.Write(temp.ToJSON());
                     w.Flush();
                 }
 
-                client.Close();
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                client.Close();
             }
         }
     }
