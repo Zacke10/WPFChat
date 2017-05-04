@@ -95,7 +95,7 @@ namespace ChatServer
                         tmpClients = clients.Where(c => cm.Recipients.Contains(c.UserName) || cm.Sender == c.UserName);
                     }
 
-                    foreach (ClientHandler tmpClient in clients)
+                    foreach (ClientHandler tmpClient in tmpClients)
                     {
                         ExecuteSend(messageSerialized, tmpClient);
                     }
