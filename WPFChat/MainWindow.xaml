@@ -15,9 +15,10 @@
         <TextBox Height="231" HorizontalAlignment="Left" Margin="11,38,0,0" Name="chatBox" VerticalAlignment="Top" Width="356" IsReadOnly="True" VerticalScrollBarVisibility="Visible" />
         <Label Content="Messages from:" Height="28" HorizontalAlignment="Left" Margin="373,38,0,0" Name="label3" VerticalAlignment="Top" Width="98" />
         <TextBox Height="198" HorizontalAlignment="Left" Margin="373,71,0,0" Name="messagesFrom" VerticalAlignment="Top" Width="117" IsReadOnly="True" VerticalScrollBarVisibility="Auto" />
-        <Label Content="Local Name:" Height="28" HorizontalAlignment="Left" Margin="293,7,0,0" Name="label4" VerticalAlignment="Top" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="373,8,0,0" Name="localName" VerticalAlignment="Top" Width="117" />
+        <Label Content="Name:" Height="28" HorizontalAlignment="Left" Margin="268,6,0,0" Name="label4" VerticalAlignment="Top" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="318,0,0,344.6" Name="userName" VerticalAlignment="Bottom" Width="117" />
         <TextBox Height="52" HorizontalAlignment="Left" Margin="11,274,0,0" Name="messageText" VerticalAlignment="Top" Width="356" />
         <Button Content="Send" Height="35" HorizontalAlignment="Left" Margin="373,274,0,0" Name="sendMessageButton" VerticalAlignment="Top" Width="117" IsDefault="True" Click="sendMessageButton_Click"/>
+        <Button Content="Connect" HorizontalAlignment="Left" Margin="450,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
     </Grid>
 </Window>

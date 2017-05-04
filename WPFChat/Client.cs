@@ -18,24 +18,34 @@ namespace WPFChat
         private TcpClient client;
         Action<ChatMessage> addMessage;
         BlockingCollection<ChatMessage> messageCollection = new BlockingCollection<ChatMessage>();
-        Window mainWindow;
-        public Client(Action<ChatMessage> messageAdder, Window w)
+        MainWindow mainWindow;
+
+        public Client(Action<ChatMessage> messageAdder, MainWindow w)
         {
             addMessage = messageAdder;
             mainWindow = w;
         }
-        public void Start()
+        public void Start(object info)
         {
-            client = new TcpClient("127.0.0.1", 5000);
+            ServerInfo serverInfo = info as ServerInfo;
+            try
+            {
+                client = new TcpClient(serverInfo.ServerIP, serverInfo.ServerPort);
 
-            Thread listenerThread = new Thread(Listen);
-            listenerThread.Start();
+                Thread listenerThread = new Thread(Listen);
+                listenerThread.Start();
 
-            Thread senderThread = new Thread(Send);
-            senderThread.Start();
+                Thread senderThread = new Thread(Send);
+                senderThread.Start();
 
-            senderThread.Join();
-            listenerThread.Join();
+                senderThread.Join();
+                listenerThread.Join();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         public void AddMessageToSend(ChatMessage messageToSend)

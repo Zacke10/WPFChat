@@ -28,8 +28,6 @@ namespace WPFChat
         {
             InitializeComponent();
             client = new Client( c=> { chatList.Add(c); DisplayMessages(); } , this);
-            Thread clientThread = new Thread(client.Start);
-            clientThread.Start();
         }
 
         public void DisplayMessages()
@@ -48,6 +46,27 @@ namespace WPFChat
             client.AddMessageToSend(messageToSend);
             messageText.Clear();
 
+        }
+
+        public ServerInfo GetServerInfo()
+        {
+            string sIP = serverIP.Text;
+            string sPort = serverPort.Text;
+            string uName = userName.Text;
+            return new ServerInfo()
+            {
+                ServerIP = sIP,
+                ServerPort = Int32.Parse(sPort),
+                Username = uName
+            };             
+    
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Thread clientThread = new Thread(client.Start);
+            clientThread.Start(GetServerInfo());
+            
         }
     }
 }
