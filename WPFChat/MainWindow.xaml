@@ -29,7 +29,7 @@
         <TextBox Height="23" HorizontalAlignment="Left" Margin="299,38,0,0" Name="userName" VerticalAlignment="Top" Width="117" />
         <TextBox Margin="11,0,166,50" Name="messageText" Height="52" VerticalAlignment="Bottom" />
         <Button Content="Send" Margin="0,0,43,50" Name="sendMessageButton" IsDefault="True" Click="sendMessageButton_Click" HorizontalAlignment="Right" Width="117" Height="52" VerticalAlignment="Bottom"/>
-        <Button Height="23" Content="Connect" HorizontalAlignment="Left" Margin="426,38,0,0" Name="connectButton" VerticalAlignment="Top" Width="56" Click="Button_Click"/>
+        <Button Height="23" Content="Connect" HorizontalAlignment="Left" Margin="426,38,0,0" Name="connectButton" VerticalAlignment="Top" Width="56" Click="connectButton_Click"/>
         <ListBox Margin="0,66,43,107" MinHeight="180" MinWidth="50" Name="listBoxUsers" HorizontalAlignment="Right" Width="117"/>
         <Image Source="C:\Users\Administrator\Source\Repos\WPFChat\WPFChat\CL.png" HorizontalAlignment="Left" Height="39" Margin="10,5,0,0" VerticalAlignment="Top" Width="39"/>
     
