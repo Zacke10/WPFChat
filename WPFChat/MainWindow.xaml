@@ -5,20 +5,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFChat"
         mc:Ignorable="d"
-        Title="MainWindow" Height="407.143" Width="541.327"
+        Title="MainWindow" Height="541" Width="589.327" MinWidth="680" MinHeight="500"
+      
         SizeToContent="WidthAndHeight">
     <Grid>
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="67,8,0,0" Name="serverIP" VerticalAlignment="Top" Width="90" />
-        <Label Content="Server IP:" Height="28" HorizontalAlignment="Left" Margin="8,6,0,0" Name="label1" VerticalAlignment="Top" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="199,8,0,0" Name="serverPort" VerticalAlignment="Top" Width="47" />
-        <Label Content="Port:" Height="28" HorizontalAlignment="Left" Margin="166,6,0,0" Name="label2" VerticalAlignment="Top" />
-        <TextBox Margin="11,38,166,107" Name="chatBox" IsReadOnly="True" VerticalScrollBarVisibility="Visible" />
-        <Label Content="Users:" Height="28" HorizontalAlignment="Left" Margin="373,38,0,0" Name="label3" VerticalAlignment="Top" Width="98" />
-        <Label Content="Name:" Height="28" HorizontalAlignment="Left" Margin="258,6,0,0" Name="label4" VerticalAlignment="Top" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="302,8,0,0" Name="userName" VerticalAlignment="Top" Width="117" />
-        <TextBox Margin="11,274,166,50" Name="messageText" />
-        <Button Content="Send" Margin="373,274,43,50" Name="sendMessageButton" IsDefault="True" Click="sendMessageButton_Click"/>
-        <Button Height="23" Content="Connect" HorizontalAlignment="Left" Margin="440,8,0,0" Name="connectButton" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-        <ListBox Height="203" Margin="0,66,43,0" Name="listBoxUsers" VerticalAlignment="Top" HorizontalAlignment="Right" Width="117"/>
+        <TextBlock FontSize="22" Margin="55,5,0,0">
+            <Run Foreground="Gold">C</Run>
+            <Run Foreground="Maroon">h</Run>
+            <Run Foreground="Blue">a</Run>
+            <Run Foreground="Red">t</Run>
+            <Run Foreground="HotPink">t</Run>
+            <Run Foreground="Green">y</Run>
+
+        </TextBlock>
+
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="67,38,0,0" Name="serverIP" VerticalAlignment="Top" Width="90" />
+        <Label Content="Server IP:" Height="28" HorizontalAlignment="Left" Margin="10,36,0,0" Name="label1" VerticalAlignment="Top" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="199,38,0,0" Name="serverPort" VerticalAlignment="Top" Width="47" />
+        <Label Content="Port:" Height="28" HorizontalAlignment="Left" Margin="165,36,0,0" Name="label2" VerticalAlignment="Top" />
+        <TextBox Margin="11,66,166,107" Name="chatBox" IsReadOnly="True" VerticalScrollBarVisibility="Visible" />
+        <Label Content="Users:" Height="28" HorizontalAlignment="Right" Margin="0,38,65,0" Name="label3" VerticalAlignment="Top" Width="98" />
+        <Label Content="Name:" Height="28" HorizontalAlignment="Left" Margin="255,35,0,0" Name="label4" VerticalAlignment="Top" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="299,38,0,0" Name="userName" VerticalAlignment="Top" Width="117" />
+        <TextBox Margin="11,0,166,50" Name="messageText" Height="52" VerticalAlignment="Bottom" />
+        <Button Content="Send" Margin="0,0,43,50" Name="sendMessageButton" IsDefault="True" Click="sendMessageButton_Click" HorizontalAlignment="Right" Width="117" Height="52" VerticalAlignment="Bottom"/>
+        <Button Height="23" Content="Connect" HorizontalAlignment="Left" Margin="426,38,0,0" Name="connectButton" VerticalAlignment="Top" Width="56" Click="Button_Click"/>
+        <ListBox Margin="0,66,43,107" MinHeight="180" MinWidth="50" Name="listBoxUsers" HorizontalAlignment="Right" Width="117"/>
+        <Image Source="C:\Users\Administrator\Source\Repos\WPFChat\WPFChat\CL.png" HorizontalAlignment="Left" Height="39" Margin="10,5,0,0" VerticalAlignment="Top" Width="39"/>
+    
     </Grid>
 </Window>
