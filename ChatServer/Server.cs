@@ -23,13 +23,12 @@ namespace ChatServer
         public void DisconnectClient(ClientHandler client)
         {
 
-
             lock (clients)
             {
                 clients.Remove(client);
                 Console.WriteLine("User: " + client.UserName + " has left the building...");
-                //Broadcast(client, "User: " + client.UserName + " has left the building...");
             }
+            SendUsernames();
         }
         public void Run()
         {
@@ -60,6 +59,23 @@ namespace ChatServer
                     listener.Stop();
             }
         }
+        public void SendUsernames()
+        {
+            lock (clients)
+            {
+                UsernameList ul = new UsernameList() {
+                    Usernames = clients.Select(c => c.UserName).ToList()
+                };
+                string message = ul.ToJSON();
+
+                foreach (var client in clients)
+                {
+                    
+                    ExecuteSend(message, client);
+                }
+            }
+        }
+
         public void SendMessage()
         {
             ChatMessage cm;

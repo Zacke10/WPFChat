@@ -21,7 +21,10 @@ namespace ChatServer
         public void HandleLogin(Login login)
         {
             UserName = login.UserName;
+            cServer.SendUsernames();
         }
+
+       
 
         public ClientHandler(TcpClient c, Server server)
         {

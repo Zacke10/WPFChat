@@ -108,8 +108,10 @@ namespace WPFChat
 
         public void HandleUsernames(UsernameList usernameList)
         {
+            usernameList.Usernames.Sort();
             Dispatcher.Invoke(() =>
             {
+                listBoxUsers.Items.Clear();
                 foreach (var user in usernameList.Usernames)
                 {
                     listBoxUsers.Items.Add(user);

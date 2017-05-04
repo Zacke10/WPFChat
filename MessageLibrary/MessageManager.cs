@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace MessageLibrary
 {
@@ -25,13 +26,18 @@ namespace MessageLibrary
             {
                 if (message.StartsWith("msg:"))
                 {
-                    ChatMessage cm = Newtonsoft.Json.JsonConvert.DeserializeObject<ChatMessage>(message.Substring(4));
+                    ChatMessage cm = JsonConvert.DeserializeObject<ChatMessage>(message.Substring(4));
                     chatController.HandleMessage(cm);
                 }
                 else if (message.StartsWith("cmd:"))
                 {
-                    Login cm = Newtonsoft.Json.JsonConvert.DeserializeObject<Login>(message.Substring(4));
+                    Login cm = JsonConvert.DeserializeObject<Login>(message.Substring(4));
                     chatController.HandleLogin(cm);
+                }
+                else if (message.StartsWith("unm:"))
+                {
+                    UsernameList ul = JsonConvert.DeserializeObject<UsernameList>(message.Substring(4));
+                    chatController.HandleUsernames(ul);
                 }
                 else
                 {
