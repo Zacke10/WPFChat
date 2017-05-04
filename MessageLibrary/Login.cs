@@ -13,6 +13,7 @@ namespace MessageLibrary
         public string Version { get; set; }
         public string StatusMessage { get; set; }
         public bool? LoginSuccessful { get; set; }
+        [JsonIgnore]
         public string Prefix => "cmd:";
 
         public string ToJSON()

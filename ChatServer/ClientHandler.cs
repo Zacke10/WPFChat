@@ -50,5 +50,10 @@ namespace ChatServer
                 throw;
             }
         }
+
+        public void HandleUsernames(UsernameList usernameList)
+        {
+            // :)
+        }
     }
 }

@@ -35,7 +35,7 @@ namespace WPFChat
         private void EnabledComponent(bool isConnected)
         {
             chatBox.IsEnabled = isConnected;
-            messagesFrom.IsEnabled = chatBox.IsEnabled;
+            listBoxUsers.IsEnabled = chatBox.IsEnabled;
             sendMessageButton.IsEnabled = chatBox.IsEnabled;
             messageText.IsEnabled = chatBox.IsEnabled;
 
@@ -58,7 +58,14 @@ namespace WPFChat
 
         private void sendMessageButton_Click(object sender, RoutedEventArgs e)
         {
-            ChatMessage messageToSend = new ChatMessage() { Body = messageText.Text };
+            
+            //TODO kolla namn listan och skapa recipents
+
+
+            ChatMessage messageToSend = new ChatMessage()
+            {
+                Body = messageText.Text
+            };
             client.AddMessageToSend(messageToSend);
             messageText.Clear();
 
@@ -74,8 +81,8 @@ namespace WPFChat
                 ServerIP = sIP,
                 ServerPort = Int32.Parse(sPort),
                 Username = uName
-            };             
-    
+            };
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -96,7 +103,18 @@ namespace WPFChat
 
         public void HandleLogin(Login login)
         {
-            
+
+        }
+
+        public void HandleUsernames(UsernameList usernameList)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                foreach (var user in usernameList.Usernames)
+                {
+                    listBoxUsers.Items.Add(user);
+                }
+            });
         }
     }
 }

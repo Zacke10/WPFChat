@@ -10,5 +10,6 @@ namespace MessageLibrary
     {
         void HandleMessage(ChatMessage message);
         void HandleLogin(Login login);
+        void HandleUsernames(UsernameList usernameList);
     }
 }

@@ -54,6 +54,7 @@ namespace WPFChat
 
         public void AddMessageToSend(ChatMessage messageToSend)
         {
+            messageToSend.Sender = UserName;
             messageCollection.Add(messageToSend);
         }
 
