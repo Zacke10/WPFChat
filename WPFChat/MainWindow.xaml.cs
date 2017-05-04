@@ -23,6 +23,7 @@ namespace WPFChat
     public partial class MainWindow : Window, IChatController
     {
         Client client;
+        private const string BroadcastMessage = "Everyone";
         List<ChatMessage> chatList = new List<ChatMessage>();
 
         public MainWindow()
@@ -58,13 +59,16 @@ namespace WPFChat
 
         private void sendMessageButton_Click(object sender, RoutedEventArgs e)
         {
-            
+
             //TODO kolla namn listan och skapa recipents
 
-
+            string sendTo = listBoxUsers.SelectedItem.ToString() == BroadcastMessage ? null : listBoxUsers.SelectedItem.ToString();
+            List<string> recipients = sendTo != null ? new List<string>() {sendTo} : null;
             ChatMessage messageToSend = new ChatMessage()
             {
-                Body = messageText.Text
+                Body = messageText.Text,
+                Recipients = recipients
+                
             };
             client.AddMessageToSend(messageToSend);
             messageText.Clear();
@@ -112,6 +116,7 @@ namespace WPFChat
             Dispatcher.Invoke(() =>
             {
                 listBoxUsers.Items.Clear();
+                listBoxUsers.Items.Add(BroadcastMessage);
                 foreach (var user in usernameList.Usernames)
                 {
                     listBoxUsers.Items.Add(user);
