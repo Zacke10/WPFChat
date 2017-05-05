@@ -1,5 +1,6 @@
 ﻿using MessageLibrary;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 
@@ -14,7 +15,7 @@ namespace ChatServer
 
         public void HandleMessage(ChatMessage cMessage)
         {
-            if (!String.IsNullOrEmpty(UserName))
+            if (!String.IsNullOrEmpty(UserName) && UserName == cMessage.Sender)
             {
                 cServer.AddMessageToQueue(cMessage);
                 cServer.SendMessage();
@@ -23,16 +24,27 @@ namespace ChatServer
 
         public void HandleLogin(Login login)
         {
+            Login loginInfo = new Login();
+
             if (cServer.IsValidUsername(login.UserName))
             {
                 UserName = login.UserName;
                 cServer.SendUsernames();
+                login.LoginSuccessful = true;
+                HandleMessage(new ChatMessage()
+                {
+                    Recipients = new List<string> { login.UserName },
+                    Body = $"Welcome to the chat service {login.UserName}!",
+                    Sender = "ChatServer!"    
+                });
             }
             else
             {
-                UserName = login.UserName + Guid.NewGuid();
-                cServer.SendUsernames();
+                login.LoginSuccessful = false;
+                login.StatusMessage = $"{login.UserName} is not a valid username";
             }
+            cServer.ExecuteSend(login.ToJSON(), this);
+
         }
 
 

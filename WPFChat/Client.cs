@@ -16,9 +16,8 @@ namespace WPFChat
     class Client
     {
         private TcpClient client;
-        BlockingCollection<ChatMessage> messageCollection = new BlockingCollection<ChatMessage>();
+        BlockingCollection<IChatProtocol> messageCollection = new BlockingCollection<IChatProtocol>();
         MainWindow mainWindow;
-        public string UserName { get; set; }
 
         private MessageManager messageManager;
 
@@ -31,7 +30,6 @@ namespace WPFChat
         public void Start(object info)
         {
             ServerInfo serverInfo = info as ServerInfo;
-            UserName = serverInfo.Username;
             try
             {
                 client = new TcpClient(serverInfo.ServerIP, serverInfo.ServerPort);
@@ -54,19 +52,17 @@ namespace WPFChat
             }
         }
 
-        public void AddMessageToSend(ChatMessage messageToSend)
+ 
+        public void AddToSendQueue(IChatProtocol data)
         {
-            messageToSend.Sender = UserName;
-            messageCollection.Add(messageToSend);
+            messageCollection.Add(data);
         }
 
         public void Listen()
         {
-
             try
             {
                 string message = "";
-
                 while (true)
                 {
                     NetworkStream n = client.GetStream();
@@ -81,32 +77,23 @@ namespace WPFChat
             }
         }
 
-        public void DisplayInChatWindow(ChatMessage message)
-        {
-
-        }
-
         public void Send()
         {
             try
             {
                 NetworkStream n = client.GetStream();
                 BinaryWriter w = new BinaryWriter(n);
-                Login login = new Login() {UserName = UserName};
-                w.Write(login.ToJSON());
-                w.Flush();
 
                 while (true)
                 {
-                    ChatMessage temp = messageCollection.Take();
+                    IChatProtocol temp = messageCollection.Take();
                     n = client.GetStream();
                     w = new BinaryWriter(n);
                     w.Write(temp.ToJSON());
                     w.Flush();
                 }
-
-
             }
+
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);

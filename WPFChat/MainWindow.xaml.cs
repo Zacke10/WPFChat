@@ -51,6 +51,19 @@ namespace WPFChat
             connectButton.IsEnabled = serverIP.IsEnabled;
         }
 
+        private void EnabledComponentBadUsername()
+        {
+            chatBox.IsEnabled = false;
+            listBoxUsers.IsEnabled = false;
+            sendMessageButton.IsEnabled = false;
+            messageText.IsEnabled = false;
+
+            serverIP.IsEnabled = false;
+            serverPort.IsEnabled = false;
+            userName.IsEnabled = true;
+            connectButton.IsEnabled = true;
+        }
+
 
         public void DisplayMessages()
         {
@@ -75,11 +88,11 @@ namespace WPFChat
                 List<string> recipients = sendTo != null ? new List<string>() { sendTo } : null;
                 ChatMessage messageToSend = new ChatMessage()
                 {
+                    Sender = userName.Text,
                     Body = messageText.Text,
                     Recipients = recipients
-
                 };
-                client.AddMessageToSend(messageToSend);
+                client.AddToSendQueue(messageToSend);
                 messageText.Clear();
             }
         }
@@ -100,10 +113,18 @@ namespace WPFChat
 
         private void connectButton_Click(object sender, RoutedEventArgs e)
         {
-            EnabledComponent(true);
-            Thread clientThread = new Thread(client.Start);
-            clientThread.IsBackground = true;
-            clientThread.Start(GetServerInfo());
+            if (connectButton.Content.ToString() == "Connect")
+            {
+                Thread clientThread = new Thread(client.Start);
+                client.AddToSendQueue(new Login() { UserName = userName.Text });
+                clientThread.IsBackground = true;
+                clientThread.Start(GetServerInfo());
+
+            }
+            else
+            {
+                client?.AddToSendQueue(new Login() { UserName = userName.Text });
+            }
         }
 
         public void HandleMessage(ChatMessage message)
@@ -117,7 +138,23 @@ namespace WPFChat
 
         public void HandleLogin(Login login)
         {
-
+            if (login.LoginSuccessful ?? false)
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    EnabledComponent(true);
+                    connectButton.Content = "Connect";
+                });
+            }
+            else
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    EnabledComponentBadUsername();
+                    connectButton.Content = "Set username";
+                    MessageBox.Show("Bad username");
+                });
+            }
         }
 
         public void HandleUsernames(UsernameList usernameList)
@@ -133,6 +170,7 @@ namespace WPFChat
                 }
                 listBoxUsers.SelectedIndex = 0;
             });
+
 
         }
 

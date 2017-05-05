@@ -29,6 +29,7 @@ namespace ChatServer
             }
             SendUsernames();
         }
+
         public void Run()
         {
             TcpListener listener = new TcpListener(IPAddress.Any, 5000);
@@ -62,7 +63,7 @@ namespace ChatServer
         {
             lock (clients)
             {
-                return clients.Where(c => c.UserName == username).Count() == 0;
+                return clients.Where(c => !String.IsNullOrEmpty(c.UserName) && c.UserName == username).Count() == 0;
             }
         }
 
@@ -111,7 +112,7 @@ namespace ChatServer
             }
         }
 
-        private void ExecuteSend(string messageSerialized, ClientHandler tmpClient)
+        public void ExecuteSend(string messageSerialized, ClientHandler tmpClient)
         {
             NetworkStream n = tmpClient.TcpClient.GetStream();
             BinaryWriter w = new BinaryWriter(n);
