@@ -33,7 +33,7 @@ namespace WPFChat
             EnabledComponent(false);
             serverIP.Text = "127.0.0.1";
             serverPort.Text = "5000";
-            userName.Text = "Polismyndigheten";
+            userName.Text = "Charles";
 
 
         }
